@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from ...Template import Template
+from ..Classifier import Classifier
 
 
-class SVC(Template):
+class SVC(Classifier):
     """
     See also
     --------
@@ -83,10 +83,12 @@ class SVC(Template):
         self.svs_rows = model.n_support_
         self.n_svs_rows = len(model.n_support_)
         self.coeffs = model.dual_coef_
-        self.inters = model._intercept_
-        self.n_inters = len(model._intercept_)
+        self.inters = model._intercept_  # pylint: disable=W0212
+        self.n_inters = len(model._intercept_)  # pylint: disable=W0212
         self.classes = model.classes_
         self.n_classes = len(model.classes_)
+        self.is_binary = self.n_classes == 2
+        self.prefix = 'binary' if self.is_binary else 'multi'
 
     def export(self, class_name="Brain", method_name="predict",
                use_repr=True, use_file=False):
@@ -147,7 +149,7 @@ class SVC(Template):
 
         # Support vectors:
         vectors = []
-        for vidx, vector in enumerate(self.svs):
+        for vector in self.svs:
             _vectors = [self.temp('type').format(self.repr(v)) for v in vector]
             _vectors = self.temp('arr').format(', '.join(_vectors))
             vectors.append(_vectors)
@@ -159,7 +161,7 @@ class SVC(Template):
 
         # Coefficients:
         coeffs = []
-        for cidx, coeff in enumerate(self.coeffs):
+        for coeff in self.coeffs:
             _coeffs = [self.temp('type').format(self.repr(c)) for c in coeff]
             _coeffs = self.temp('arr').format(', '.join(_coeffs))
             coeffs.append(_coeffs)
@@ -177,39 +179,46 @@ class SVC(Template):
         out += '\n'
 
         # Classes:
-        classes = [self.temp('type').format(self.repr(c)) for c in self.classes]
-        classes = ', '.join(classes)
-        out += self.temp('arr[]').format(
-            type='int', name='classes', values=classes)
-        out += '\n'
+        if not self.is_binary:
+            classes = [self.temp('type').format(self.repr(c)) for c in self.classes]
+            classes = ', '.join(classes)
+            out += self.temp('arr[]').format(
+                type='int', name='classes', values=classes)
+            out += '\n'
 
         # Kernels:
         if self.params['kernel'] == 'rbf':
-            out += self.temp('kernel.rbf').format(
+            name = self.prefix + '.kernel.rbf'
+            out += self.temp(name).format(
                 len(self.svs), self.n_svs,
                 self.repr(self.params['gamma']))
         elif self.params['kernel'] == 'poly':
-            out += self.temp('kernel.poly').format(
+            name = self.prefix + '.kernel.poly'
+            out += self.temp(name).format(
                 len(self.svs), self.n_svs,
                 self.repr(self.params['gamma']),
                 self.repr(self.params['coef0']),
                 self.repr(self.params['degree']))
         elif self.params['kernel'] == 'sigmoid':
-            out += self.temp('kernel.sigmoid').format(
+            name = self.prefix + '.kernel.sigmoid'
+            out += self.temp(name).format(
                 len(self.svs), self.n_svs,
                 self.repr(self.params['gamma']),
                 self.repr(self.params['coef0']),
                 self.repr(self.params['degree']))
         elif self.params['kernel'] == 'linear':
-            out += self.temp('kernel.linear').format(
+            name = self.prefix + '.kernel.linear'
+            out += self.temp(name).format(
                 len(self.svs), self.n_svs)
         out += '\n'
 
         # Decicion:
         out += self.temp('starts').format(self.n_svs_rows)
         out += self.temp('ends').format(self.n_svs_rows)
-        out += self.temp('decicions').format(self.n_inters, self.n_svs_rows)
-        out += self.temp('classes').format(self.n_inters, self.n_classes)
+        name = self.prefix + '.decisions'
+        out += self.temp(name).format(self.n_inters, self.n_svs_rows)
+        name = self.prefix + '.classes'
+        out += self.temp(name).format(self.n_inters, self.n_classes)
         n_indents = 0 if self.target_language in ['java', 'js', 'php'] else 1
         out = self.indent(out, n_indents=2-n_indents)
         return self.temp('method', n_indents=1-n_indents, skipping=True).format(

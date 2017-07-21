@@ -7,7 +7,7 @@
 [![GitHub license](https://img.shields.io/pypi/l/sklearn-porter.svg)](https://raw.githubusercontent.com/nok/sklearn-porter/master/license.txt)
 [![Join the chat at https://gitter.im/nok/sklearn-porter](https://badges.gitter.im/nok/sklearn-porter.svg)](https://gitter.im/nok/sklearn-porter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) models to [C](https://en.wikipedia.org/wiki/C_(programming_language)), [Java](https://en.wikipedia.org/wiki/Java_(programming_language)), [JavaScript](https://en.wikipedia.org/wiki/JavaScript) and others.<br>It's recommended for limited embedded systems and critical applications where performance matters most.
+Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) models to C, Java, JavaScript and others.<br>It's recommended for limited embedded systems and critical applications where performance matters most.
 
 
 ## Machine learning algorithms
@@ -15,11 +15,11 @@ Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) m
 <table>
     <tbody>
         <tr>
-            <td align="center" width="40%"><strong>Type</strong></td>
+            <td align="center" width="40%"><strong>Algorithm</strong></td>
             <td align="center" colspan="6" width="60%"><strong>Programming language</strong></td>
         </tr>
         <tr>
-            <td align="center" width="40%">Classifier</td>
+            <td align="left" width="40%">Classification</td>
             <td align="center" width="10%">C</td>
             <td align="center" width="10%">Java</td>
             <td align="center" width="10%">JavaScript</td>
@@ -29,63 +29,63 @@ Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) m
         </tr>
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.svm.SVC.html">sklearn.svm.SVC</a></td>
-            <td align="center"><a href="examples/classifier/SVC/c/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/SVC/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/SVC/js/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/SVC/c/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/SVC/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/SVC/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
-            <td align="center"><a href="examples/classifier/SVC/php/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/SVC/php/basics.ipynb">✓</a></td>
             <td align="center"></td>
         </tr>
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.svm.NuSVC.html">sklearn.svm.NuSVC</a></td>
-            <td align="center"><a href="examples/classifier/NuSVC/c/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/NuSVC/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/NuSVC/js/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/NuSVC/c/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/NuSVC/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/NuSVC/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
-            <td align="center"><a href="examples/classifier/NuSVC/php/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/NuSVC/php/basics.ipynb">✓</a></td>
             <td align="center"></td>
         </tr>
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.svm.LinearSVC.html">sklearn.svm.LinearSVC</a></td>
-            <td align="center"><a href="examples/classifier/LinearSVC/c/basics.ipynb">✕</a> , <a href="examples/classifier/LinearSVC/c/compilation.py#L14">✕</a></td>
-            <td align="center"><a href="examples/classifier/LinearSVC/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/LinearSVC/js/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/LinearSVC/go/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/LinearSVC/php/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/LinearSVC/ruby/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/LinearSVC/c/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/LinearSVC/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/LinearSVC/js/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/LinearSVC/go/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/LinearSVC/php/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/LinearSVC/ruby/basics.ipynb">✓</a></td>
         </tr>
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.tree.DecisionTreeClassifier.html">sklearn.tree.DecisionTreeClassifier</a></td>
-            <td align="center"><a href="examples/classifier/DecisionTreeClassifier/c/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/DecisionTreeClassifier/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/DecisionTreeClassifier/js/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/DecisionTreeClassifier/c/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/DecisionTreeClassifier/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/DecisionTreeClassifier/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
-            <td align="center"><a href="examples/classifier/DecisionTreeClassifier/php/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/DecisionTreeClassifier/php/basics.ipynb">✓</a></td>
             <td align="center"></td>
         </tr>
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.ensemble.RandomForestClassifier.html">sklearn.ensemble.RandomForestClassifier</a></td>
-            <td align="center"><a href="examples/classifier/RandomForestClassifier/c/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/RandomForestClassifier/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/RandomForestClassifier/js/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/RandomForestClassifier/c/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/RandomForestClassifier/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/RandomForestClassifier/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
             <td align="center"></td>
             <td align="center"></td>
         </tr>
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.ensemble.ExtraTreesClassifier.html">sklearn.ensemble.ExtraTreesClassifier</a></td>
-            <td align="center"><a href="examples/classifier/ExtraTreesClassifier/c/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/ExtraTreesClassifier/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/ExtraTreesClassifier/js/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/ExtraTreesClassifier/c/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/ExtraTreesClassifier/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/ExtraTreesClassifier/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
             <td align="center"></td>
             <td align="center"></td>
         </tr>
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.ensemble.AdaBoostClassifier.html">sklearn.ensemble.AdaBoostClassifier</a></td>
-            <td align="center"><a href="examples/classifier/AdaBoostClassifier/c/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/AdaBoostClassifier/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/AdaBoostClassifier/js/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/AdaBoostClassifier/c/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/AdaBoostClassifier/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/AdaBoostClassifier/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
             <td align="center"></td>
             <td align="center"></td>
@@ -93,8 +93,8 @@ Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) m
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.neighbors.KNeighborsClassifier.html">sklearn.neighbors.KNeighborsClassifier</a></td>
             <td align="center"></td>
-            <td align="center"><a href="examples/classifier/KNeighborsClassifier/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/KNeighborsClassifier/js/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/KNeighborsClassifier/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/KNeighborsClassifier/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
             <td align="center"></td>
             <td align="center"></td>
@@ -102,8 +102,8 @@ Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) m
         <tr>
             <td><a href="http://scikit-learn.org/0.18/modules/generated/sklearn.neural_network.MLPClassifier.html">sklearn.neural_network.MLPClassifier</a></td>
             <td align="center"></td>
-            <td align="center"><a href="examples/classifier/MLPClassifier/java/basics.ipynb">✕</a></td>
-            <td align="center"><a href="examples/classifier/MLPClassifier/js/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/MLPClassifier/java/basics.ipynb">○</a></td>
+            <td align="center"><a href="examples/classifier/MLPClassifier/js/basics.ipynb">○</a></td>
             <td align="center"></td>
             <td align="center"></td>
             <td align="center"></td>
@@ -111,8 +111,8 @@ Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) m
         <tr>
             <td><a href="http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB">sklearn.naive_bayes.GaussianNB</a></td>
             <td align="center"></td>
-            <td align="center"><a href="examples/classifier/GaussianNB/java/basics.ipynb">✕</a></td>
-            <td align="center"></td>
+            <td align="center"><a href="examples/classifier/GaussianNB/java/basics.ipynb">✓</a></td>
+            <td align="center"><a href="examples/classifier/GaussianNB/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
             <td align="center"></td>
             <td align="center"></td>
@@ -120,8 +120,21 @@ Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) m
         <tr>
             <td><a href="http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html#sklearn.naive_bayes.BernoulliNB">sklearn.naive_bayes.BernoulliNB</a></td>
             <td align="center"></td>
-            <td align="center"><a href="examples/classifier/BernoulliNB/java/basics.ipynb">✕</a></td>
+            <td align="center"><a href="examples/classifier/BernoulliNB/java/basics.ipynb">✓</a></td>
             <td align="center"></td>
+            <td align="center"></td>
+            <td align="center"></td>
+            <td align="center"></td>
+        </tr>
+        <tr>
+            <td align="left" width="40%">Regression</td>
+            <td colspan="6" width="10%"></td>
+        </tr>
+        <tr>
+            <td><a href="http://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html">sklearn.neural_network.MLPRegressor</a></td>
+            <td align="center"></td>
+            <td align="center"></td>
+            <td align="center"><a href="examples/regressor/MLPRegressor/js/basics.ipynb">✓</a></td>
             <td align="center"></td>
             <td align="center"></td>
             <td align="center"></td>
@@ -129,6 +142,7 @@ Transpile trained [scikit-learn](https://github.com/scikit-learn/scikit-learn) m
     </tbody>
 </table>
 
+✓ = is full-featured, ○ = has minor exceptions
 
 ## Installation
 
@@ -169,8 +183,8 @@ from sklearn.tree import tree
 from sklearn_porter import Porter
 
 # Load data and train the classifier:
-iris_data = load_iris()
-X, y = iris_data.data, iris_data.target
+samples = load_iris()
+X, y = samples.data, samples.target
 clf = tree.DecisionTreeClassifier()
 clf.fit(X, y)
 
@@ -188,9 +202,9 @@ Run the prediction(s) in the target programming language directly:
 
 ```python
 # ...
+porter = Porter(clf, language='java')
 
 # Prediction(s):
-porter = Porter(clf, language='java')
 Y_preds = porter.predict(X)
 y_pred = porter.predict(X[0])
 y_pred = porter.predict([1., 2., 3., 4.])
@@ -198,16 +212,17 @@ y_pred = porter.predict([1., 2., 3., 4.])
 
 ### Accuracy
 
-Test the accuracy between the original and the ported estimator:
+Always compute the accuracy between the original and the ported estimator:
 
 ```python
 # ...
+porter = Porter(clf, language='java')
 
 # Accuracy:
-porter = Porter(clf, language='java')
 accuracy = porter.predict_test(X)
 print(accuracy) # 1.0
 ```
+
 
 ### Command-line interface
 
@@ -289,8 +304,8 @@ source deactivate
 While you are developing new features or fixes, you can reduce the test duration by setting the number of random model tests:
 
 ```
-N_RANDOM_TESTS=30 python -m unittest discover -vp '*Test.py'
-```
+N_RANDOM_FEATURE_SETS=15 N_EXISTING_FEATURE_SETS=30 python -m unittest discover -vp '*Test.py'
+```   
 
 
 ### Quality

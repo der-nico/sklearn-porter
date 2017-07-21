@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from ...Template import Template
 import numpy as np
+from ..Classifier import Classifier
 
-np.set_printoptions(precision=15)
+np.set_printoptions(precision=64)
 
 
-class MLPClassifier(Template):
+class MLPClassifier(Classifier):
     """
     See also
     --------
@@ -62,14 +62,14 @@ class MLPClassifier(Template):
         # Activation function ('identity', 'logistic', 'tanh' or 'relu'):
         self.hidden_activation = self.model.activation
         if self.hidden_activation not in self.hidden_activation_functions:
-            raise ValueError(('The activation function \'%s\' of the model '
-                              'is not supported.') % self.hidden_activation)
+            raise ValueError(("The activation function '%s' of the model "
+                              "is not supported.") % self.hidden_activation)
 
         # Output activation function ('softmax' or 'logistic'):
         self.output_activation = self.model.out_activation_
         if self.output_activation not in self.output_activation_functions:
-            raise ValueError(('The activation function \'%s\' of the model '
-                              'is not supported.') % self.output_activation)
+            raise ValueError(("The activation function '%s' of the model "
+                              "is not supported.") % self.output_activation)
 
         self.n_layers = self.model.n_layers_
         self.n_hidden_layers = self.model.n_layers_ - 2
@@ -78,7 +78,7 @@ class MLPClassifier(Template):
         self.n_outputs = self.model.n_outputs_
 
         self.hidden_layer_sizes = self.model.hidden_layer_sizes
-        if type(self.hidden_layer_sizes) is int:
+        if isinstance(self.hidden_layer_sizes, int):
             self.hidden_layer_sizes = [self.hidden_layer_sizes]
         self.hidden_layer_sizes = list(self.hidden_layer_sizes)
 
@@ -91,15 +91,19 @@ class MLPClassifier(Template):
         # Bias:
         self.intercepts = self.model.intercepts_
 
+        # Binary or multiclass classifier?
+        self.is_binary = self.n_outputs == 1
+        self.prefix = 'binary' if self.is_binary else 'multi'
+
     @property
     def hidden_activation_functions(self):
         """Get list of supported activation functions for the hidden layers."""
-        return ['relu', 'identity']  # 'tanh' and 'logistic' fails in tests
+        return ['relu', 'identity']  # 'tanh', 'logistic'
 
     @property
     def output_activation_functions(self):
         """Get list of supported activation functions for the output layer."""
-        return ['softmax']  # 'logistic' fails in tests
+        return ['softmax', 'logistic']
 
     def export(self, class_name='Brain',
                method_name='predict',
@@ -174,7 +178,8 @@ class MLPClassifier(Template):
         intercepts = self.temp('arr[][]').format(
             data_type='double', name='intercepts', values=intercepts)
 
-        return self.temp('method', skipping=True, n_indents=1).format(
+        name = self.prefix + '.method'
+        return self.temp(name, skipping=True, n_indents=1).format(
             class_name=self.class_name, method_name=self.method_name,
             n_features=self.n_inputs, n_classes=self.n_outputs,
             activations=activations, coefficients=coefficients,
@@ -214,4 +219,3 @@ class MLPClassifier(Template):
         for layer in self.layer_units[1:]:
             yield self.temp('new_arr').format(
                 data_type='double', values=(str(int(layer))))
-

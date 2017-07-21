@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from ...Template import Template
+from ..Classifier import Classifier
 
 
-class GaussianNB(Template):
+class GaussianNB(Classifier):
     """
     See also
     --------
@@ -21,6 +21,13 @@ class GaussianNB(Template):
             'arr':      '{{{0}}}',
             'arr[]':    '{type}[] {name} = {{{values}}};',
             'arr[][]':  '{type}[][] {name} = {{{values}}};',
+            'indent':   '    ',
+        },
+        'js': {
+            'type':     '{0}',
+            'arr':      '[{0}]',
+            'arr[]':    'var {name} = [{values}];',
+            'arr[][]':  'var {name} = [{values}];',
             'indent':   '    ',
         },
     }
@@ -119,8 +126,7 @@ class GaussianNB(Template):
         :return out : string
             The built method as string.
         """
-        n_indents = 1 if self.target_language in ['java'] else 0
-        return self.temp('method.predict', n_indents=n_indents,
+        return self.temp('method.predict', n_indents=1,
                          skipping=True).format(**self.__dict__)
 
     def create_class(self, method):

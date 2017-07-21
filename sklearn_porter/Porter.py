@@ -21,7 +21,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.naive_bayes import BernoulliNB
 
 
-class Porter:
+class Porter(object):
 
     # Version:
     _version_path = str(os.path.join(os.path.dirname(__file__),
@@ -32,6 +32,7 @@ class Porter:
     __version__ = str(_version).strip()
 
     def __init__(self, model, language='java', method='predict', **kwargs):
+        # pylint: disable=unused-argument
         """
         Port a trained model to the syntax of a chosen
         programming language.
@@ -56,6 +57,8 @@ class Porter:
         # Algorithm type:
         if isinstance(self.model, self.classifiers):
             self.algorithm_type = 'classifier'
+        elif isinstance(self.model, self.regressors):
+            self.algorithm_type = 'regressor'
         else:
             error = "The given model '{model}' isn't" \
                     " supported.".format(**self.__dict__)
@@ -104,6 +107,14 @@ class Porter:
 
         self.tested_env_dependencies = False
 
+    @staticmethod
+    def get_sklearn_version():
+        from sklearn import __version__ as version
+        version = str(version).split('.')
+        version = [int(v) for v in version]
+        major, minor = version[0], version[1]
+        return major, minor
+
     @property
     def classifiers(self):
         """
@@ -130,10 +141,7 @@ class Porter:
         )
 
         # sklearn version >= 0.18.0
-        from sklearn import __version__ as version
-        version = str(version).split('.')
-        version = [int(v) for v in version]
-        major, minor = version[0], version[1]
+        major, minor = Porter.get_sklearn_version()
         if major > 0 or (major == 0 and minor >= 18):
             from sklearn.neural_network.multilayer_perceptron \
                 import MLPClassifier
@@ -141,8 +149,32 @@ class Porter:
 
         return classifiers
 
+    @property
+    def regressors(self):
+        """
+        Get a set of supported regressors.
+
+        Returns
+        -------
+        regressors : {set}
+            The supported regressors.
+        """
+
+        # sklearn version < 0.18.0
+        regressors = ()
+
+        # sklearn version >= 0.18.0
+        major, minor = Porter.get_sklearn_version()
+        if major > 0 or (major == 0 and minor >= 18):
+            from sklearn.neural_network.multilayer_perceptron \
+                import MLPRegressor
+            regressors += (MLPRegressor, )
+
+        return regressors
+
     def export(self, class_name='Brain', method_name='predict',
                use_repr=True, details=False, **kwargs):
+        # pylint: disable=unused-argument
         """
         Transpile a trained model to the syntax of a
         chosen programming language.
@@ -196,9 +228,8 @@ class Porter:
         }
         return output
 
-    def port(self, class_name='Brain',
-             method_name='predict',
-             details=False):
+    def port(self, class_name='Brain', method_name='predict', details=False):
+        # pylint: disable=unused-argument
         """
         Transpile a trained model to the syntax of a
         chosen programming language.
@@ -226,7 +257,7 @@ class Porter:
         return self.export(**loc)
 
     def predict(self, X, class_name='Brain', method_name='predict',
-                tnp_dir='tmp', keep_tmp_dir=False):
+                tnp_dir='tmp', keep_tmp_dir=False, use_repr=True):
         """
         Predict using the transpiled model.
 
@@ -248,6 +279,9 @@ class Porter:
         :param keep_tmp_dir : bool, default False
             Whether to delete the temporary directory
             or not.
+            
+        :param use_repr : bool, default: True
+            Whether to use repr() for floating-point values or not.
 
         Returns
         -------
@@ -273,11 +307,11 @@ class Porter:
         # Transpiled model:
         details = self.export(class_name=class_name,
                               method_name=method_name,
-                              details=True)
+                              use_repr=use_repr, details=True)
         filename = Porter.get_filename(class_name, self.target_language)
         target_file = os.path.join(tnp_dir, filename)
-        with open(target_file, str('w')) as f:
-            f.write(details.get('model'))
+        with open(target_file, str('w')) as file_:
+            file_.write(details.get('model'))
 
         # Compilation command:
         comp_cmd = details.get('cmd').get('compilation')
@@ -289,31 +323,31 @@ class Porter:
         exec_cmd = details.get('cmd').get('execution')
         exec_cmd = str(exec_cmd).split()
 
-        y = None
+        pred_y = None
 
         # Single feature set:
         if exec_cmd is not None and len(X.shape) == 1:
-            full_exec_cmd = exec_cmd + [str(f).strip() for f in X]
-            pred = subp.check_output(full_exec_cmd, stderr=subp.STDOUT,
-                                     cwd=tnp_dir)
-            y = int(pred)
+            full_exec_cmd = exec_cmd + [str(sample).strip() for sample in X]
+            pred_y = subp.check_output(full_exec_cmd, stderr=subp.STDOUT,
+                                       cwd=tnp_dir)
+            pred_y = int(pred_y)
 
         # Multiple feature sets:
         if exec_cmd is not None and len(X.shape) > 1:
-            y = np.empty(X.shape[0], dtype=int)
+            pred_y = np.empty(X.shape[0], dtype=int)
             for idx, x in enumerate(X):
-                full_exec_cmd = exec_cmd + [str(f).strip() for f in x]
+                full_exec_cmd = exec_cmd + [str(feature).strip() for feature in x]
                 pred = subp.check_output(full_exec_cmd, stderr=subp.STDOUT,
                                          cwd=tnp_dir)
-                y[idx] = int(pred)
+                pred_y[idx] = int(pred)
 
         # Cleanup:
         if not keep_tmp_dir:
             subp.call(['rm', '-rf', tnp_dir])
 
-        return y
+        return pred_y
 
-    def predict_test(self, X, normalize=True):
+    def predict_test(self, X, normalize=True, use_repr=True):
         """
         Compute the accuracy of the ported classifier.
 
@@ -325,6 +359,9 @@ class Porter:
         :param normalize : bool, optional (default=True)
             If ``False``, return the number of correctly classified samples.
             Otherwise, return the fraction of correctly classified samples.
+            
+        :param use_repr : bool, default: True
+            Whether to use repr() for floating-point values or not.
 
         Returns
         -------
@@ -339,7 +376,7 @@ class Porter:
         if not X.ndim > 1:
             X = np.array([X])
         y_true = self.model.predict(X)
-        y_pred = self.predict(X)
+        y_pred = self.predict(X, use_repr=use_repr)
         return accuracy_score(y_true, y_pred, normalize=normalize)
 
     @staticmethod

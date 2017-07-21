@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from sklearn.tree.tree import DecisionTreeClassifier
+from ..Classifier import Classifier
 
-from ...Template import Template
 
-
-class RandomForestClassifier(Template):
+class RandomForestClassifier(Classifier):
     """
     See also
     --------
@@ -118,17 +117,18 @@ class RandomForestClassifier(Template):
         """
         return self.create_class(self.create_method())
 
-    def create_branches(self, l, r, t, value, features, node, depth):
+    def create_branches(self, left_nodes, right_nodes, threshold,
+                        value, features, node, depth):
         """
         Parse and port a single tree model.
 
         Parameters
         ----------
-        :param l : object
+        :param left_nodes : object
             The left children node.
-        :param r : object
+        :param right_nodes : object
             The left children node.
-        :param t : object
+        :param threshold : object
             The decision threshold.
         :param value : object
             The label or class.
@@ -146,18 +146,20 @@ class RandomForestClassifier(Template):
         """
         out = ''  # returned output
         # ind = '\n' + '    ' * depth
-        if t[node] != -2.:
+        if threshold[node] != -2.:
             out += '\n'
             out += self.temp('if', n_indents=depth).format(
-                features[node], '<=', self.repr(t[node]))
-            if l[node] != -1.:
+                features[node], '<=', self.repr(threshold[node]))
+            if left_nodes[node] != -1.:
                 out += self.create_branches(
-                    l, r, t, value, features, l[node], depth + 1)
+                    left_nodes, right_nodes, threshold, value,
+                    features, left_nodes[node], depth + 1)
             out += '\n'
             out += self.temp('else', n_indents=depth)
-            if r[node] != -1.:
+            if right_nodes[node] != -1.:
                 out += self.create_branches(
-                    l, r, t, value, features, r[node], depth + 1)
+                    left_nodes, right_nodes, threshold, value,
+                    features, right_nodes[node], depth + 1)
             out += '\n'
             out += self.temp('endif', n_indents=depth)
         else:
@@ -195,11 +197,8 @@ class RandomForestClassifier(Template):
             model.tree_.children_left, model.tree_.children_right,
             model.tree_.threshold, model.tree_.value, indices, 0, 1)
 
-        suffix = ("{0:0" + str(len(str(self.n_estimators - 1))) + "d}")
-        model_index = suffix.format(int(model_index))
-
         return self.temp('single_method').format(
-            model_index, self.method_name, self.n_classes, tree_branches)
+            str(model_index), self.method_name, self.n_classes, tree_branches)
 
     def create_method(self):
         """
@@ -212,12 +211,10 @@ class RandomForestClassifier(Template):
         """
         # Generate method or function names:
         fn_names = []
-        suffix = ("_{0:0" + str(len(str(self.n_estimators - 1))) + "d}")
         for idx, model in enumerate(self.models):
-            fn_name = self.method_name + suffix.format(idx)
-            fn_name = self.temp(
-                'method_calls', n_indents=2, skipping=True).format(
-                idx, self.class_name, fn_name)
+            fn_name = self.method_name + '_' + str(idx)
+            fn_name = self.temp('method_calls', n_indents=2, skipping=True)\
+                .format(idx, self.class_name, fn_name)
             fn_names.append(fn_name)
         fn_names = '\n'.join(fn_names)
         fn_names = self.indent(fn_names, n_indents=1, skipping=True)
